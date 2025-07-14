@@ -1,0 +1,14 @@
+
+services:
+  php:
+    build:
+      context: ./docker
+    volumes:
+      - ./symfony-admin:/var/www/symfony-admin
+      - ./symfony-campus:/var/www/symfony-campus
+      - ./symfony-content:/var/www/symfony-content
+    ports:
+      - "8001:8001"
+      - "8002:8002"
+      - "8003:8003"
+    restart: unless-stopped
