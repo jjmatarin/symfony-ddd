@@ -1,14 +1,109 @@
-
 services:
-  php:
-    build:
-      context: ./docker
-    volumes:
-      - ./symfony-admin:/var/www/symfony-admin
-      - ./symfony-campus:/var/www/symfony-campus
-      - ./symfony-content:/var/www/symfony-content
-    ports:
-      - "8001:8001"
-      - "8002:8002"
-      - "8003:8003"
-    restart: unless-stopped
+    app-admin:
+        build:
+            context: .
+            dockerfile: docker/frankenphp/Dockerfile
+        ports:
+            - "8001:443"
+        volumes:
+            - ./symfony-admin:/app
+        environment:
+            APP_ENV: dev
+            APP_DEBUG: 1
+
+    app-client:
+        build:
+            context: .
+            dockerfile: docker/frankenphp/Dockerfile
+        ports:
+            - "8002:443"
+        volumes:
+            - ./symfony-client:/app
+        environment:
+            APP_ENV: dev
+            APP_DEBUG: 1
+
+    app-campus:
+        build:
+            context: .
+            dockerfile: docker/frankenphp/Dockerfile
+        ports:
+            - "8003:443"
+        volumes:
+            - ./symfony-campus:/app
+        environment:
+            APP_ENV: dev
+            APP_DEBUG: 1
+
+    app-content:
+        build:
+            context: .
+            dockerfile: docker/frankenphp/Dockerfile
+        ports:
+            - "8004:443"
+        volumes:
+            - ./symfony-content:/app
+        environment:
+            APP_ENV: dev
+            APP_DEBUG: 1
+
+
+    db:
+        image: postgres:16
+        environment:
+            POSTGRES_DB: symfony
+            POSTGRES_USER: symfony
+            POSTGRES_PASSWORD: symfony
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+
+    rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+
+
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+        ports: [ "9200:9200" ]
+        environment:
+            - discovery.type=single-node
+        volumes:
+            - esdata:/usr/share/elasticsearch/data
+
+    logstash:
+        image: docker.elastic.co/logstash/logstash:8.13.4
+        ports:
+            - "5000:5000/udp"
+            - "5044:5044"
+        volumes:
+            - ./docker/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+
+    kibana:
+        image: docker.elastic.co/kibana/kibana:8.13.4
+        ports: [ "5601:5601" ]
+        environment:
+            ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+
+    prometheus:
+        image: prom/prometheus
+        volumes:
+            - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+        ports:
+            - "9090:9090"
+
+    jaeger:
+        image: jaegertracing/all-in-one:1.55
+        ports:
+            - "16686:16686"
+            - "6831:6831/udp"
+            - "4317:4317"
+            - "4318:4318"
+
+volumes:
+    pgdata:
+    esdata:
+

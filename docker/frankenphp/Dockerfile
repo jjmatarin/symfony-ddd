@@ -1,13 +1,23 @@
 FROM dunglas/frankenphp:latest
 
-# Instala supervisord
-RUN apt-get update && apt-get install -y supervisor
+# Instala herramientas necesarias y Composer
+RUN apt-get update && apt-get install -y --no-install-recommends \
+	acl \
+	file \
+	gettext \
+	supervisor \
+	git \
+	&& rm -rf /var/lib/apt/lists/*
 
-# Copia configuración supervisor
-COPY supervisord.conf /etc/supervisord.conf
+RUN set -eux; \
+	install-php-extensions \
+		@composer \
+		apcu \
+		intl \
+		opcache \
+		zip \
+        gd \
+        mbstring \
+	;
 
-# Exponemos los puertos de ambas apps
-EXPOSE 8001 8002 8003
-
-# Comando por defecto: supervisor
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+WORKDIR /app
