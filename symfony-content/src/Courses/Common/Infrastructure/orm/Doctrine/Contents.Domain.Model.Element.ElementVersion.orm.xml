@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Courses\Contents\Domain\Model\Element\ElementVersion">
+    <id name="id" type="ulid"/>
+    <field name="title" type="string" length="255" nullable="false"/>
+    <field name="date" type="datetime" nullable="false"/>
+    <field name="status" type="string" length="4" nullable="false" enum-type="App\Courses\Contents\Domain\Model\Element\ElementVersionStatusEnum"/>
+    <field name="type" type="string" length="4" nullable="false" enum-type="App\Courses\Contents\Domain\Model\Element\ElementVersionTypeEnum"/>
+    <many-to-one field="element" target-entity="App\Courses\Contents\Domain\Model\Element\Element" inversed-by="versions">
+      <join-columns>
+        <join-column name="element_id" referenced-column-name="id" nullable="false"/>
+      </join-columns>
+    </many-to-one>
+    <one-to-one field="resource" target-entity="App\Courses\Contents\Domain\Model\Element\Resource" mapped-by="elementVersion"/>
+    <one-to-one field="homework" target-entity="App\Courses\Contents\Domain\Model\Element\Homework" mapped-by="elementVersion"/>
+    <one-to-one field="test" target-entity="App\Courses\Contents\Domain\Model\Element\Test" mapped-by="elementVersion"/>
+    <one-to-one field="scorm" target-entity="App\Courses\Contents\Domain\Model\Element\Scorm" mapped-by="elementVersion"/>
+  </entity>
+</doctrine-mapping>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Courses\Contents\Domain\Model\Element\Homework">
+    <id name="elementVersion" type="ulid" association-key="true"/>
+    <field name="solutionType" type="string" length="5" nullable="false"/>
+    <field name="duration" type="integer" nullable="false"/>
+    <field name="description" type="text" nullable="false"/>
+    <one-to-one field="elementVersion" target-entity="App\Courses\Contents\Domain\Model\Element\ElementVersion" inversed-by="homework">
+      <join-columns>
+        <join-column name="element_version_id" referenced-column-name="id" nullable="false"/>
+      </join-columns>
+    </one-to-one>
+  </entity>
+</doctrine-mapping>

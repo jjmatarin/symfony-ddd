@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Courses\Courses\Domain\Model\FormativeAction\FormativeActionStructure">
+    <id name="formativeAction" type="ulid" association-key="true"/>
+    <id name="version" type="integer"/>
+    <field name="type" type="string" length="1" nullable="false" enum-type="App\Courses\Courses\Domain\Model\Common\StructureTypeEnum"/>
+    <field name="orderNumber" type="integer" nullable="false"/>
+    <field name="formativeModuleId" type="ulid" nullable="true"/>
+    <field name="elementId" type="ulid" nullable="true"/>
+    <many-to-one field="formativeAction" target-entity="App\Courses\Courses\Domain\Model\FormativeAction\FormativeAction" inversed-by="structure">
+      <join-columns>
+        <join-column name="formative_action_id" referenced-column-name="id" nullable="false"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>
