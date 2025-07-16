@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class TestElasticCommand extends Command
 {
-    const INDEX = 'Test';
+    const INDEX = 'test';
 
     private ClientInterface $client;
 
@@ -37,7 +37,7 @@ class TestElasticCommand extends Command
             'type' => 2
         ]);
 
-        var_dump($response);
+        var_dump($response->asArray());
 
         return Command::SUCCESS;
     }
@@ -46,6 +46,7 @@ class TestElasticCommand extends Command
     {
         return $this->client->index([
             'index' => self::INDEX,
+            'id' => '123456',
             'body' => ['doc' => $data],
         ]);
     }
