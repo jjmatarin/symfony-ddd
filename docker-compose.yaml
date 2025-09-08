@@ -1,0 +1,127 @@
+services:
+    app-admin:
+        build:
+            context: .
+            dockerfile: docker/frankenphp/Dockerfile
+        ports:
+            - "8001:443"
+        volumes:
+            - ./symfony-admin:/app
+            - ./shared-message-contracts:/shared-message-contracts
+            - ./docker/frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
+        environment:
+            FRANKENPHP_CERT: /app/certs/server.crt
+            FRANKENPHP_KEY: /app/certs/server.key
+            PHP_IDE_CONFIG: serverName=app-admin
+
+    app-client:
+        build:
+            context: .
+            dockerfile: docker/frankenphp/Dockerfile
+        ports:
+            - "8002:443"
+        volumes:
+            - ./symfony-client:/app
+            - ./shared-message-contracts:/shared-message-contracts
+        environment:
+            FRANKENPHP_CERT: /app/certs/server.crt
+            FRANKENPHP_KEY: /app/certs/server.key
+            PHP_IDE_CONFIG: serverName=app-client
+
+    app-campus:
+        build:
+            context: .
+            dockerfile: docker/frankenphp/Dockerfile
+        ports:
+            - "8003:443"
+        volumes:
+            - ./symfony-campus:/app
+            - ./shared-message-contracts:/shared-message-contracts
+        environment:
+            FRANKENPHP_CERT: /app/certs/server.crt
+            FRANKENPHP_KEY: /app/certs/server.key
+            PHP_IDE_CONFIG: serverName=app-campus
+
+    db:
+        image: postgres:16
+        environment:
+            POSTGRES_DB: symfony
+            POSTGRES_USER: symfony
+            POSTGRES_PASSWORD: symfony
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+            - ./postgresql:/docker-entrypoint-initdb.d
+        ports:
+            - "5432:5432"
+        command: ["postgres", "-c", "wal_level=logical", "-c", "max_replication_slots=10", "-c", "max_wal_senders=10"]
+
+    rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+
+
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:9.0.3
+        ports: [ "9200:9200" ]
+        environment:
+            - discovery.type=single-node
+            - xpack.security.enabled=false
+        volumes:
+            - esdata:/usr/share/elasticsearch/data
+
+    logstash:
+        image: docker.elastic.co/logstash/logstash:9.0.3
+        ports:
+            - "5000:5000/udp"
+            - "5044:5044"
+        volumes:
+            - ./docker/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+
+    kibana:
+        image: docker.elastic.co/kibana/kibana:9.0.3
+        ports: [ "5601:5601" ]
+        environment:
+            ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+        depends_on:
+            - elasticsearch
+
+    prometheus:
+        image: prom/prometheus
+        volumes:
+            - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+        ports:
+            - "9090:9090"
+
+    grafana:
+        image: grafana/grafana:latest
+        ports:
+            - "3000:3000"
+        environment:
+            - GF_SECURITY_ADMIN_USER=admin
+            - GF_SECURITY_ADMIN_PASSWORD=admin
+        depends_on:
+            - prometheus
+
+    otel-collector:
+        image: otel/opentelemetry-collector:latest
+        ports:
+            - "4417:4317"
+            - "4418:4318"
+        volumes:
+            - ./docker/opentelemetry/config.yml:/etc/otel/config.yml
+        command: ["--config=/etc/otel/config.yml"]
+
+    jaeger:
+        image: jaegertracing/all-in-one:latest
+        command: ["--collector.otlp.enabled=true"]
+        ports:
+            - "16686:16686"
+        depends_on:
+            - otel-collector
+
+volumes:
+    pgdata:
+    esdata:
+
