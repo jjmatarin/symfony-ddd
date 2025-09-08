@@ -1,0 +1,5 @@
+controllers:
+    resource:
+        path: ../src/Licensing/Infrastructure/Presentation/API/Symfony/
+        namespace: App\Licensing\Infrastructure\Presentation\API\Symfony
+    type: attribute
