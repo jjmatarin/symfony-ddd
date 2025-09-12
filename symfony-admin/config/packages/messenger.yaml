@@ -13,14 +13,18 @@ framework:
             App\Common\Bus\CommandRequestInterface: sync
             App\Common\Bus\QueryRequestInterface: sync
             App\Common\Domain\EventHandling\DomainEventInterface: sync
+            Symfony\Component\Mailer\Messenger\SendEmailMessage: sync
 
-        default_bus: command.bus
+        default_bus: default.bus
         buses:
+            default.bus:
+                middleware:
+
             command.bus:
                 middleware:
-                    - App\Common\Infrastructure\EventHandling\Symfony\DomainEventsPublisherMiddleware
                     - validation
                     - doctrine_transaction
+                    - App\Common\Infrastructure\EventHandling\Symfony\DomainEventsPublisherMiddleware
 
             query.bus:
                 middleware:

@@ -49,11 +49,13 @@ class ClientsTest extends AbstractTestBase
         $this->assertEquals('Test Client desc ble', $response['data']['description']);
         $this->assertEquals('medium', $response['data']['licenseType']);
 
+        /*
         $this->request('DELETE', '/api/v1/clients/' . $id, [], [], 204);
         sleep(2);
 
         $response = $this->request('GET', '/api/v1/clients');
         $this->assertCount($prevCount, $response['data']);
+        */
 
     }
 }

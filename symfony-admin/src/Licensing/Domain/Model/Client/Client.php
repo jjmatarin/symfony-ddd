@@ -2,13 +2,15 @@
 
 namespace App\Licensing\Domain\Model\Client;
 
-use App\Common\Domain\EventHandling\DomainEventPublisher;
+use App\Common\Domain\Model\AggregateEventsTrait;
 use App\Common\Domain\Model\EntityId;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 class Client
 {
+    use AggregateEventsTrait;
+
     private EntityId $id;
     private string $name;
     private string $description;
@@ -17,53 +19,80 @@ class Client
     private LicenseTypeEnum $activeLicenseType;
     private Collection $licenses;
 
-    public static function create(EntityId $id, string $name, string $description, LicenseTypeEnum $licenseType, EntityId $productId): self
-    {
-        return new self($id, $name, $description, $licenseType, $productId);
-    }
-
-    private function __construct(EntityId $id, string $name, string $description, LicenseTypeEnum $licenseType, EntityId $productId)
+    public function __construct()
     {
         $this->licenses = new ArrayCollection();
+    }
 
-        $this->id = $id;
-        $this->name = $name;
-        $this->description = $description;
-        $this->status = ClientStatusEnum::ONBOARDING;
-        $this->activeLicenseVersion = 1;
-        $this->activeLicenseType = $licenseType;
-        $this->createLicense($this->activeLicenseVersion, $licenseType, $productId);
+    public static function create(EntityId $id, string $name, string $description, LicenseTypeEnum $licenseType, EntityId $productId): self
+    {
+        $client = new self();
+        $client->applyEvent(new ClientWasCreated(0, $id->get(), $name, $description, $licenseType->value, $productId));
 
-        DomainEventPublisher::getInstance()->publish(new ClientWasCreated($id->get(), $name, $description, $licenseType->value, $productId));
+        return $client;
+    }
+
+    public function update(string $name, string $description): void
+    {
+        $this->applyEvent(new ClientWasUpdated(++$this->playhead, $this->id->get(), $name, $description));
+    }
+
+    public function delete(): void
+    {
+        $this->applyEvent(new ClientWasDeleted(++$this->playhead, $this->id->get()));
     }
 
     public function changeLicense(LicenseTypeEnum $licenseType, EntityId $productId): void
     {
-        $this->activeLicenseVersion++;
-        $this->activeLicenseType = $licenseType;
-        $this->createLicense($this->activeLicenseVersion, $licenseType, $productId);
-        DomainEventPublisher::getInstance()->publish(new LicenseWasChanged($this->id->get(), $licenseType->value, $productId));
+        $this->applyEvent(new LicenseWasChanged(++$this->playhead, $this->id->get(), $licenseType->value, $productId));
     }
 
     private function createLicense(int $version, LicenseTypeEnum $licenseType, EntityId $productId): void
     {
         $license = new License($this, $version, $licenseType, $productId);
         $this->licenses->add($license);
-
     }
 
-    public function update(string $name, string $description): void
+    private function applyClientWasCreated(ClientWasCreated $event): void
     {
-        $this->name = $name;
-        $this->description = $description;
-
-        DomainEventPublisher::getInstance()->publish(new ClientWasUpdated($this->id->get(), $name, $description));
+        $this->id = EntityId::fromString($event->id);
+        $this->name = $event->name;
+        $this->description = $event->description;
+        $this->status = ClientStatusEnum::ONBOARDING;
+        $this->activeLicenseVersion = 1;
+        $this->activeLicenseType = LicenseTypeEnum::from($event->licenseType);
+        $this->createLicense($this->activeLicenseVersion, $this->activeLicenseType, EntityId::fromString($event->productId));
     }
 
-    public function delete(): void
+    private function applyClientWasUpdated(ClientWasUpdated $event): void
+    {
+        $this->name = $event->name;
+        $this->description = $event->description;
+    }
+
+    private function applyClientWasDeleted(ClientWasDeleted $event): void
     {
         $this->status = ClientStatusEnum::DELETED;
-        DomainEventPublisher::getInstance()->publish(new ClientWasDeleted($this->id->get()));
+    }
+
+    private function applyChangeLicense(LicenseWasChanged $event): void
+    {
+        $this->activeLicenseVersion++;
+        $this->activeLicenseType = LicenseTypeEnum::from($event->licenseType);
+        $this->createLicense($this->activeLicenseVersion, $this->activeLicenseType, EntityId::fromString($event->productId));
+    }
+
+    /**
+     * @return LicenseLogItem[]
+     */
+    public function getLicensesLog(): array
+    {
+        $result = [];
+        /** @var License $license */
+        foreach ($this->licenses as $license) {
+            $result[] = new LicenseLogItem($license->getDate(), $license->getVersion(), $license->getLicenseType());
+        }
+        return $result;
     }
 
     public function getId(): EntityId
@@ -89,18 +118,5 @@ class Client
     public function getActiveLicenseType(): LicenseTypeEnum
     {
         return $this->activeLicenseType;
-    }
-
-    /**
-     * @return LicenseLogItem[]
-     */
-    public function getLicensesLog(): array
-    {
-        $result = [];
-        /** @var License $license */
-        foreach ($this->licenses as $license) {
-            $result[] = new LicenseLogItem($license->getDate(), $license->getVersion(), $license->getLicenseType());
-        }
-        return $result;
     }
 }

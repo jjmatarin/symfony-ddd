@@ -21,7 +21,7 @@ class DomainEventPublisher
         throw new \BadMethodCallException('Cloning is not allowed.');
     }
 
-    public function publish(DomainEventInterface $event): void
+    public function publish(DomainEventBase $event): void
     {
         $this->events[] = $event;
     }

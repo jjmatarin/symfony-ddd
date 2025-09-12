@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250908122934 extends AbstractMigration
+final class Version20250911170136 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -30,6 +30,8 @@ final class Version20250908122934 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN product.id IS \'(DC2Type:string)\'');
         $this->addSql('COMMENT ON COLUMN product.price_money IS \'(DC2Type:money)\'');
         $this->addSql('COMMENT ON COLUMN product.price_date IS \'(DC2Type:datetimetz_immutable)\'');
+        $this->addSql('CREATE TABLE stored_event (aggregate_id VARCHAR(36) NOT NULL, playhead INT NOT NULL, aggregate_type VARCHAR(255) NOT NULL, event_type VARCHAR(255) NOT NULL, payload JSON NOT NULL, recorded_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(aggregate_id, playhead))');
+        $this->addSql('COMMENT ON COLUMN stored_event.recorded_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('ALTER TABLE license ADD CONSTRAINT FK_5768F41919EB6921 FOREIGN KEY (client_id) REFERENCES client (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
@@ -41,5 +43,6 @@ final class Version20250908122934 extends AbstractMigration
         $this->addSql('DROP TABLE client');
         $this->addSql('DROP TABLE license');
         $this->addSql('DROP TABLE product');
+        $this->addSql('DROP TABLE stored_event');
     }
 }

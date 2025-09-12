@@ -2,9 +2,12 @@
 
 namespace App\Command;
 
+use App\Common\Bus\CommandBusInterface;
 use App\Common\Domain\Model\Currency;
 use App\Common\Domain\Model\EntityId;
 use App\Common\Domain\Model\Money;
+use App\Licensing\Application\Client\CreateClient\CreateClientCommand;
+use App\Licensing\Application\Client\UpdateClient\UpdateClientCommand;
 use App\Licensing\Domain\Model\Product\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -20,6 +23,7 @@ class TestCommand extends Command
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private CommandBusInterface $commandBus,
     ) {
         parent::__construct();
     }
@@ -37,12 +41,27 @@ class TestCommand extends Command
 
         $this->entityManager->persist($formativeAction);
         $this->entityManager->flush();
-        */
 
         $product = $this->entityManager->find(Product::class, EntityId::fromString('01K4MNR2BSS8RT5GHGX73WWM5E'));
         $product->changePrice(new Money(120, new Currency('EUR')));
         var_dump($product);
         $this->entityManager->flush();
+
+        $command = new CreateClientCommand(
+            name: 'Testttttasdf',
+            description: 'Desc...',
+            licenseType: 'basic',
+            productId: '01K4MNR2BSS8RT5GHGX73WWM5E'
+        );
+        $this->commandBus->execute($command);
+        */
+
+        $command = new UpdateClientCommand(
+            id: '01K4ZEPT2KYV0CZ36MA7RGG70Z',
+            name: 'Testttttasdf updated',
+            description: 'Desc... basdf sadf asdf asdf asd fasd f'
+        );
+        $this->commandBus->execute($command);
 
         return Command::SUCCESS;
     }

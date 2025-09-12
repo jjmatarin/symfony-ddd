@@ -33,5 +33,8 @@ services:
             tags:
                 - { name: messenger.message_handler, bus: domain.event.bus }
 
+    App\Licensing\Domain\Model\Client\ClientRepository:
+        class: App\Licensing\Infrastructure\Persistence\Doctrine\Model\Client\DoctrineClientEventStoreRepository
+
     App\Licensing\ReadModel\Client\ClientReadModelInterface:
         class: App\Licensing\Infrastructure\ReadModel\Elastic\ElasticClientReadModel

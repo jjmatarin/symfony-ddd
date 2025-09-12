@@ -20,11 +20,6 @@ class DoctrineClientRepository extends ServiceEntityRepository implements Client
         return $this->find($id);
     }
 
-    public function listAll(): array
-    {
-        return $this->findAll();
-    }
-
     public function persist(Client $client): void
     {
         $this->getEntityManager()->persist($client);
