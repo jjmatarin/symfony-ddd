@@ -18,7 +18,7 @@ readonly class CreateClientHandler implements CommandHandlerInterface
     public function __invoke(CreateClientCommand $command): CreateClientResponse
     {
         $client = Client::create(EntityId::generate(), $command->name, $command->description, LicenseTypeEnum::from($command->licenseType), EntityId::fromString($command->productId));
-        $this->clientRepository->persist($client);
+        //$this->clientRepository->persist($client);
 
         return new CreateClientResponse($client->getId());
     }
