@@ -2,7 +2,9 @@
 
 namespace App\Licensing\Application\UpdateClient;
 
-readonly class UpdateClientCommand
+use App\Common\Bus\CommandRequestInterface;
+
+readonly class UpdateClientCommand implements CommandRequestInterface
 {
     public function __construct(
         public string $id,

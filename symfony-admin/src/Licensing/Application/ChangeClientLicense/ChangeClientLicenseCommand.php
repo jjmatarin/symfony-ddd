@@ -2,7 +2,9 @@
 
 namespace App\Licensing\Application\ChangeClientLicense;
 
-readonly class ChangeClientLicenseCommand
+use App\Common\Bus\CommandRequestInterface;
+
+readonly class ChangeClientLicenseCommand implements CommandRequestInterface
 {
     public function __construct(
         public string $id,

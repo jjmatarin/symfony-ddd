@@ -2,11 +2,11 @@
 
 namespace App\Licensing\Application\DeactivateClient;
 
+use App\Common\Bus\CommandHandlerInterface;
 use App\Common\Domain\Model\EntityId;
-use App\Licensing\Application\ActivateClient\ActivateClientCommand;
 use App\Licensing\Domain\Model\Client\ClientRepositoryInterface;
 
-readonly class DeactivateClientHandler
+readonly class DeactivateClientHandler implements CommandHandlerInterface
 {
     public function __construct(
         private ClientRepositoryInterface $clientRepository,

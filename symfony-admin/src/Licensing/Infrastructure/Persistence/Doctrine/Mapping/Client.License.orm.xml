@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="App\Licensing\Domain\Model\Client\License">
+        <id name="client" type="entity_id" association-key="true"/>
+        <id name="version" type="integer"/>
+        <field name="date" type="datetime"/>
+        <field name="productId" type="entity_id"/>
+        <field name="type" type="string" length="10" enum-type="App\Licensing\Domain\Model\Client\LicenseTypeEnum"/>
+        <many-to-one field="client" target-entity="App\Licensing\Domain\Model\Client\Client">
+            <join-columns>
+                <join-column name="client_id"/>
+            </join-columns>
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

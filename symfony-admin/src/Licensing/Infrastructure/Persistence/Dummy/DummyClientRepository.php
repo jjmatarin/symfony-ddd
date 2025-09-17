@@ -12,7 +12,7 @@ class DummyClientRepository implements ClientRepositoryInterface
 
     public function getById(EntityId $id): ?Client
     {
-        if (isset(self::$items->items[$id->get()])) {
+        if (isset(self::$items[$id->get()])) {
             return self::$items[$id->get()];
         }
         return null;

@@ -2,7 +2,9 @@
 
 namespace App\Licensing\Application\DeleteClient;
 
-readonly class DeleteClientCommand
+use App\Common\Bus\CommandRequestInterface;
+
+readonly class DeleteClientCommand implements CommandRequestInterface
 {
     public function __construct(
         public string $id,

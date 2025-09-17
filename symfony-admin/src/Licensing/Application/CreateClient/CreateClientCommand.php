@@ -2,7 +2,9 @@
 
 namespace App\Licensing\Application\CreateClient;
 
-readonly class CreateClientCommand
+use App\Common\Bus\CommandRequestInterface;
+
+readonly class CreateClientCommand implements CommandRequestInterface
 {
     public function __construct(
         public string $id,

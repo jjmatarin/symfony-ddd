@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="App\Licensing\Domain\Model\Client\Client">
+        <id name="id" type="entity_id"/>
+        <field name="name" type="string" length="255" nullable="false"/>
+        <field name="email" type="string" length="255" nullable="false"/>
+        <field name="description" type="text" nullable="true"/>
+        <field name="status" type="string" length="10" nullable="false" enum-type="App\Licensing\Domain\Model\Client\ClientStatusEnum"/>
+        <field name="activeLicenseVersion" type="integer" nullable="false"/>
+        <field name="activeLicenseType" type="string" length="10" nullable="false" enum-type="App\Licensing\Domain\Model\Client\LicenseTypeEnum"/>
+        <field name="activeLicenseProductId" type="entity_id" nullable="false"/>
+
+        <one-to-many field="licenses" target-entity="App\Licensing\Domain\Model\Client\License" mapped-by="client">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

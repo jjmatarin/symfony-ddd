@@ -2,12 +2,13 @@
 
 namespace App\Licensing\Application\CreateClient;
 
+use App\Common\Bus\CommandHandlerInterface;
 use App\Common\Domain\Model\EntityId;
 use App\Licensing\Domain\Model\Client\Client;
 use App\Licensing\Domain\Model\Client\ClientRepositoryInterface;
 use App\Licensing\Domain\Model\Client\LicenseTypeEnum;
 
-readonly class CreateClientHandler
+readonly class CreateClientHandler implements CommandHandlerInterface
 {
     public function __construct(
         private ClientRepositoryInterface $clientRepository,

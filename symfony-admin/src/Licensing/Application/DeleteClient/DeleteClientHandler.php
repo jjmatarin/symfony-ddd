@@ -2,11 +2,11 @@
 
 namespace App\Licensing\Application\DeleteClient;
 
+use App\Common\Bus\CommandHandlerInterface;
 use App\Common\Domain\Model\EntityId;
-use App\Licensing\Application\ActivateClient\ActivateClientCommand;
 use App\Licensing\Domain\Model\Client\ClientRepositoryInterface;
 
-readonly class DeleteClientHandler
+readonly class DeleteClientHandler implements CommandHandlerInterface
 {
     public function __construct(
         private ClientRepositoryInterface $clientRepository,

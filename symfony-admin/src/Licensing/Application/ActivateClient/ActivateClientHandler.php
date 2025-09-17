@@ -2,10 +2,11 @@
 
 namespace App\Licensing\Application\ActivateClient;
 
+use App\Common\Bus\CommandHandlerInterface;
 use App\Common\Domain\Model\EntityId;
 use App\Licensing\Domain\Model\Client\ClientRepositoryInterface;
 
-readonly class ActivateClientHandler
+readonly class ActivateClientHandler implements CommandHandlerInterface
 {
     public function __construct(
         private ClientRepositoryInterface $clientRepository,

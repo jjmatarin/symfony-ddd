@@ -2,7 +2,9 @@
 
 namespace App\Licensing\Application\DeactivateClient;
 
-readonly class DeactivateClientCommand
+use App\Common\Bus\CommandRequestInterface;
+
+readonly class DeactivateClientCommand implements CommandRequestInterface
 {
     public function __construct(
         public string $id,

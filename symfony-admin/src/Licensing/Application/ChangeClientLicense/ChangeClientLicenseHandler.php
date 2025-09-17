@@ -2,12 +2,12 @@
 
 namespace App\Licensing\Application\ChangeClientLicense;
 
+use App\Common\Bus\CommandHandlerInterface;
 use App\Common\Domain\Model\EntityId;
-use App\Licensing\Application\ActivateClient\ActivateClientCommand;
 use App\Licensing\Domain\Model\Client\ClientRepositoryInterface;
 use App\Licensing\Domain\Model\Client\LicenseTypeEnum;
 
-readonly class ChangeClientLicenseHandler
+readonly class ChangeClientLicenseHandler implements CommandHandlerInterface
 {
     public function __construct(
         private ClientRepositoryInterface $clientRepository,
