@@ -5,18 +5,19 @@ framework:
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            async: '%env(MESSENGER_TRANSPORT_DSN)%'
             # failed: 'doctrine://default?queue_name=failed'
             sync: 'sync://'
 
         routing:
-            App\Common\Bus\CommandRequestInterface: sync
+            App\Common\Bus\CommandRequestInterface: async
             App\Common\Bus\QueryRequestInterface: sync
 
         default_bus: command.bus
         buses:
             command.bus:
                 middleware:
+                  - App\Common\Infrastructure\EventHandling\DomainEventsPublisherMiddleware
                   - validation
                   - doctrine_transaction
 
@@ -25,6 +26,8 @@ framework:
                   - validation
 
             domain.event.bus:
+                default_middleware:
+                    allow_no_handlers: true
 
 
             # Route your messages to the transports

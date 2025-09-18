@@ -20,6 +20,7 @@ class ClientTest extends TestCase
 {
     public function testCreateAndUpdateClient(): void
     {
+        DomainEventPublisher::getInstance()->reset();
         $clientRepository = new DummyClientRepository();
 
         $id = EntityId::generate();

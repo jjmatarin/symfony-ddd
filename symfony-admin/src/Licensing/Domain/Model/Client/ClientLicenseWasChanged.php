@@ -2,7 +2,9 @@
 
 namespace App\Licensing\Domain\Model\Client;
 
-readonly class ClientLicenseWasChanged
+use App\Common\Bus\CommandRequestInterface;
+
+readonly class ClientLicenseWasChanged implements CommandRequestInterface
 {
     public function __construct(
         string $id,

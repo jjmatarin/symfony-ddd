@@ -12,6 +12,7 @@ class ClientTest extends TestCase
 {
     public function testClient(): void
     {
+        DomainEventPublisher::getInstance()->reset();
         $client = Client::create(
             id: EntityId::generate(),
             name: 'Client test',

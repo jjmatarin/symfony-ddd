@@ -2,7 +2,9 @@
 
 namespace App\Licensing\Domain\Model\Client;
 
-readonly class ClientWasDeactivated
+use App\Common\Bus\CommandRequestInterface;
+
+readonly class ClientWasDeactivated implements CommandRequestInterface
 {
     public function __construct(
         string $id,

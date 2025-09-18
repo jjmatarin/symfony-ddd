@@ -2,15 +2,17 @@
 
 namespace App\Licensing\Domain\Model\Client;
 
-readonly class ClientWasCreated
+use App\Common\Bus\CommandRequestInterface;
+
+readonly class ClientWasCreated implements CommandRequestInterface
 {
     public function __construct(
-        string $id,
-        string $name,
-        string $email,
-        string $description,
-        string $licenseType,
-        string $productId,
+        public string $id,
+        public string $name,
+        public string $email,
+        public string $description,
+        public string $licenseType,
+        public string $productId,
     ) {
 
     }
