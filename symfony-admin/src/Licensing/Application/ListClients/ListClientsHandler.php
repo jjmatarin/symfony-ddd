@@ -3,12 +3,12 @@
 namespace App\Licensing\Application\ListClients;
 
 use App\Common\Bus\QueryHandlerInterface;
-use App\Licensing\Domain\Model\Client\ClientRepositoryInterface;
+use App\Licensing\ReadModel\Client\ClientReadModelInterface;
 
 readonly class ListClientsHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private ClientRepositoryInterface $clientRepository,
+        private ClientReadModelInterface $clientReadModel,
     ) {
     }
 
@@ -17,15 +17,15 @@ readonly class ListClientsHandler implements QueryHandlerInterface
      */
     public function __invoke(ListClientsQuery $command): array
     {
-        $clients = $this->clientRepository->listAll();
+        $clients = $this->clientReadModel->listAll();
 
         $result = [];
         foreach ($clients as $client) {
             $result[] = new ListClientsItem(
-                id: $client->getId()->get(),
-                name: $client->getName(),
-                email: $client->getEmail(),
-                status: $client->getStatus()->value,
+                id: $client->id,
+                name: $client->name,
+                email: $client->email,
+                status: $client->status,
             );
         }
         return $result;

@@ -27,14 +27,6 @@ class DoctrineClientRepository extends ServiceEntityRepository implements Client
         $this->getEntityManager()->flush();
     }
 
-    public function listAll(): array
-    {
-        $qb = $this->createQueryBuilder('c')
-            ->where('c.status != :status')
-            ->setParameter('status', ClientStatusEnum::DELETED)
-        ;
-        return $qb->getQuery()->getResult();
-    }
 
 
 }

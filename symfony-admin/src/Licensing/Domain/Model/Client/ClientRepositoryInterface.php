@@ -8,6 +8,4 @@ interface ClientRepositoryInterface
 {
     public function getById(EntityId $id): ?Client;
     public function persist(Client $client): void;
-
-    public function listAll(): array;
 }

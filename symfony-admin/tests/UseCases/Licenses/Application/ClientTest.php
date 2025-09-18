@@ -14,6 +14,7 @@ use App\Licensing\Application\UpdateClient\UpdateClientHandler;
 use App\Licensing\Domain\Model\Client\ClientWasCreated;
 use App\Licensing\Domain\Model\Client\ClientWasUpdated;
 use App\Licensing\Infrastructure\Persistence\Dummy\DummyClientRepository;
+use App\Licensing\Infrastructure\ReadModel\Dummy\DummyClientReadModel;
 use PHPUnit\Framework\TestCase;
 
 class ClientTest extends TestCase
@@ -22,6 +23,7 @@ class ClientTest extends TestCase
     {
         DomainEventPublisher::getInstance()->reset();
         $clientRepository = new DummyClientRepository();
+        $clientReadModel = new DummyClientReadModel($clientRepository);
 
         $id = EntityId::generate();
         $productId = EntityId::generate();
@@ -35,7 +37,7 @@ class ClientTest extends TestCase
         DomainEventPublisher::getInstance()->reset();
 
         $getClientQuery = new GetClientQuery($id->get());
-        $getClientHandler = new GetClientHandler($clientRepository);
+        $getClientHandler = new GetClientHandler($clientReadModel);
         $clientResponse = $getClientHandler->__invoke($getClientQuery);
         $this->assertEquals('Client name', $clientResponse->name);
 
@@ -56,9 +58,10 @@ class ClientTest extends TestCase
         $this->expectException(NotFoundException::class);
 
         $clientRepository = new DummyClientRepository();
+        $clientReadModel = new DummyClientReadModel($clientRepository);
         $id = EntityId::generate();
         $getClientQuery = new GetClientQuery($id->get());
-        $getClientHandler = new GetClientHandler($clientRepository);
+        $getClientHandler = new GetClientHandler($clientReadModel);
         $getClientHandler->__invoke($getClientQuery);
     }
 }

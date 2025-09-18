@@ -35,3 +35,6 @@ services:
 
     App\Licensing\Domain\Model\Client\ClientRepositoryInterface:
         class: App\Licensing\Infrastructure\Persistence\Doctrine\DoctrineClientRepository
+
+    App\Licensing\ReadModel\Client\ClientReadModelInterface:
+      class: App\Licensing\Infrastructure\ReadModel\Doctrine\DoctrineClientReadModel
