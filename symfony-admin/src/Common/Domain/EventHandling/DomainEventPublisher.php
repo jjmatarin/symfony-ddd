@@ -8,20 +8,15 @@ class DomainEventPublisher
 
     private array $events = [];
 
-    public static function getInstance(): DomainEventPublisher
+    public static function getInstance(): self
     {
-        if (null === static::$instance) {
-            static::$instance = new static();
+        if (static::$instance == null) {
+            static::$instance = new DomainEventPublisher();
         }
         return static::$instance;
     }
 
-    public function __clone(): void
-    {
-        throw new \BadMethodCallException('Cloning is not allowed.');
-    }
-
-    public function publish(DomainEventBase $event): void
+    public function publish($event): void
     {
         $this->events[] = $event;
     }

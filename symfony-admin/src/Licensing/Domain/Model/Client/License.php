@@ -8,22 +8,33 @@ class License
 {
     private Client $client;
     private int $version;
+
     private \DateTimeImmutable $date;
-    private LicenseTypeEnum $licenseType;
+
+    private LicenseTypeEnum $type;
     private EntityId $productId;
 
-    public function __construct(Client $client, int $version, LicenseTypeEnum $licenseType, EntityId $productId)
-    {
-        $this->client = $client;
-        $this->version = $version;
-        $this->licenseType = $licenseType;
-        $this->productId = $productId;
-        $this->date = new \DateTimeImmutable();
+    public static function create(
+        Client $client,
+        int $version,
+        LicenseTypeEnum $type,
+        EntityId $productId,
+    ) {
+        return new self($client, $version, $type, $productId);
     }
 
-    public function getClient(): Client
-    {
-        return $this->client;
+    private function __construct(
+        Client $client,
+        int $version,
+        LicenseTypeEnum $type,
+        EntityId $productId,
+    ) {
+        $this->client = $client;
+        $this->version = $version;
+        $this->type = $type;
+        $this->productId = $productId;
+
+        $this->date = new \DateTimeImmutable();
     }
 
     public function getVersion(): int
@@ -36,9 +47,9 @@ class License
         return $this->date;
     }
 
-    public function getLicenseType(): LicenseTypeEnum
+    public function getType(): LicenseTypeEnum
     {
-        return $this->licenseType;
+        return $this->type;
     }
 
     public function getProductId(): EntityId

@@ -45,4 +45,5 @@ class EntityIdType extends Type
         }
         return EntityId::fromString($value);
     }
+
 }

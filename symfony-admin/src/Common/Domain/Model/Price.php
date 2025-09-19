@@ -6,12 +6,7 @@ readonly class Price
 {
     public function __construct(
         public Money $money,
-        public \DateTimeImmutable $date
+        public \DateTimeImmutable $date,
     ) {
-    }
-
-    public function update(Money $money, \DateTimeImmutable $date): self
-    {
-        return new self($money, $date);
     }
 }

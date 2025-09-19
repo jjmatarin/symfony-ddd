@@ -2,31 +2,24 @@
 
 namespace App\Common\Domain\Model;
 
-use Symfony\Component\Validator\Exception\InvalidArgumentException;
-
 readonly class Money
 {
-    public static function clone(self $money): self
-    {
-        return new self($money->amount, $money->currency);
-    }
-
     public function __construct(
         public int $amount,
         public Currency $currency
     ) {
         if ($amount < 0) {
-            throw new InvalidArgumentException('Amount must be non-negative');
+            throw new \Exception('Amount must be non-negative');
         }
     }
 
-    public function equals(self $other): bool
+    public function equals(Money $money): bool
     {
-        return $this->amount === $other->amount && $this->currency->equals($other->currency);
+        return $this->amount === $money->amount && $this->currency->equals($money->currency);
     }
 
-    public function add(self $money): self
+    public function add(int $amount): self
     {
-        return new self($money->amount + $this->amount, $this->currency);
+        return new self($this->amount + $amount, $this->currency);
     }
 }

@@ -2,15 +2,15 @@
 
 namespace App\Licensing\ReadModel\Client;
 
-use App\Common\Bus\QueryResponseInterface;
-
-readonly class ClientDTO implements QueryResponseInterface
+class ClientDTO
 {
     public function __construct(
         public string $id,
         public string $name,
-        public ?string $description = null,
-        public ?string $licenseType = null,
+        public string $email,
+        public string $status,
+        public string $activeLicenseType,
+        public string $activeProductId
     ) {
     }
 }

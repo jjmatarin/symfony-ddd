@@ -23,9 +23,6 @@ class AbstractTestBase extends WebTestCase
         if ($response->getStatusCode() == 500) {
             var_dump($response->getContent());
         }
-        if ($response->getStatusCode() == 401) {
-            var_dump($response->getContent());
-        }
         if ($assertResponseCode !== null) {
             $this->assertEquals($assertResponseCode, $response->getStatusCode());
         }

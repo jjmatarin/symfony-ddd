@@ -7,7 +7,7 @@
         <id name="version" type="integer"/>
         <field name="date" type="datetime"/>
         <field name="productId" type="entity_id"/>
-        <field name="licenseType" type="string" length="10" enum-type="App\Licensing\Domain\Model\Client\LicenseTypeEnum"/>
+        <field name="type" type="string" length="10" enum-type="App\Licensing\Domain\Model\Client\LicenseTypeEnum"/>
         <many-to-one field="client" target-entity="App\Licensing\Domain\Model\Client\Client">
             <join-columns>
                 <join-column name="client_id"/>

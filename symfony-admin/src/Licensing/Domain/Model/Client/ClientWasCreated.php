@@ -2,18 +2,18 @@
 
 namespace App\Licensing\Domain\Model\Client;
 
-use App\Common\Domain\EventHandling\DomainEventBase;
+use App\Common\Bus\CommandRequestInterface;
 
-readonly class ClientWasCreated extends DomainEventBase
+readonly class ClientWasCreated implements CommandRequestInterface
 {
     public function __construct(
-        int $playhead,
         public string $id,
         public string $name,
+        public string $email,
         public string $description,
         public string $licenseType,
-        public string $productId
+        public string $productId,
     ) {
-        parent::__construct(Client::class, $playhead);
+
     }
 }

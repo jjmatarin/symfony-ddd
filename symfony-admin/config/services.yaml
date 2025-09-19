@@ -23,18 +23,18 @@ services:
     _instanceof:
         App\Common\Bus\CommandHandlerInterface:
             tags:
-                - { name: messenger.message_handler, bus: command.bus }
+              - { name: messenger.message_handler }
 
         App\Common\Bus\QueryHandlerInterface:
-            tags:
-                - { name: messenger.message_handler, bus: query.bus }
+          tags:
+            - { name: messenger.message_handler }
 
-        App\Common\Bus\EventHandlerInterface:
-            tags:
-                - { name: messenger.message_handler, bus: domain.event.bus }
+        App\Common\Bus\DomainEventHandlerInterface:
+          tags:
+            - { name: messenger.message_handler }
 
-    App\Licensing\Domain\Model\Client\ClientRepository:
-        class: App\Licensing\Infrastructure\Persistence\Doctrine\Model\Client\DoctrineClientEventStoreRepository
+    App\Licensing\Domain\Model\Client\ClientRepositoryInterface:
+        class: App\Licensing\Infrastructure\Persistence\Doctrine\DoctrineClientRepository
 
     App\Licensing\ReadModel\Client\ClientReadModelInterface:
-        class: App\Licensing\Infrastructure\ReadModel\Elastic\ElasticClientReadModel
+      class: App\Licensing\Infrastructure\ReadModel\Doctrine\DoctrineClientReadModel

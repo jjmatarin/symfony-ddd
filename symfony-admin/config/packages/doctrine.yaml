@@ -1,11 +1,13 @@
 doctrine:
     dbal:
-        default_connection: default
         connections:
             default:
                 url: '%env(resolve:DATABASE_URL)%'
-                profiling_collect_backtrace: '%kernel.debug%'
                 use_savepoints: true
+                driver: pdo_pgsql
+                replicas:
+                    read:
+                        url: '%env(resolve:DATABASE_URL_RO)%'
             read_model:
                 url: '%env(resolve:DATABASE_URL_RO)%'
 
@@ -15,14 +17,12 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: true
-        enable_lazy_ghost_objects: true
         default_entity_manager: default
         entity_managers:
             default:
                 connection: default
                 naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
                 validate_xml_mapping: true
-                auto_mapping: true
                 mappings:
                     App\Admin\Licensing:
                         type: xml
@@ -36,16 +36,9 @@ doctrine:
                         dir: '%kernel.project_dir%/src/Common/Infrastructure/Persistence/Doctrine/Mapping'
                         prefix: 'App\Common\Domain\Model'
                         alias: App\Common
-                    App\Common\Infrastructure\EventStore\Doctrine:
-                        type: xml
-                        is_bundle: false
-                        dir: '%kernel.project_dir%/src/Common/Infrastructure/EventStore/Doctrine'
-                        prefix: 'App\Common\Infrastructure\EventStore\Doctrine'
-
             read_model:
                 connection: read_model
                 naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-                validate_xml_mapping: true
                 mappings:
                     App\Admin\Licensing:
                         type: xml
@@ -59,15 +52,12 @@ doctrine:
                         dir: '%kernel.project_dir%/src/Common/Infrastructure/Persistence/Doctrine/Mapping'
                         prefix: 'App\Common\Domain\Model'
                         alias: App\Common
-
-        controller_resolver:
-            auto_mapping: false
 
 when@test:
     doctrine:
         dbal:
-        # "TEST_TOKEN" is typically set by ParaTest
-        # dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+            # "TEST_TOKEN" is typically set by ParaTest
+            # dbname_suffix: '_test%env(default::TEST_TOKEN)%'
 
 when@prod:
     doctrine:

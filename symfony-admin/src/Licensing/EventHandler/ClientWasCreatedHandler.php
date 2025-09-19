@@ -2,28 +2,21 @@
 
 namespace App\Licensing\EventHandler;
 
-use App\Common\Bus\EventHandlerInterface;
+use App\Common\Bus\CommandBusInterface;
+use App\Common\Bus\DomainEventHandlerInterface;
+use App\Licensing\Application\ActivateClient\ActivateClientCommand;
 use App\Licensing\Domain\Model\Client\ClientWasCreated;
-use App\Licensing\Domain\Service\ClientNotificatorService;
-use App\Licensing\Projection\ClientProjector;
 
-readonly class ClientWasCreatedHandler implements EventHandlerInterface
+class ClientWasCreatedHandler implements DomainEventHandlerInterface
 {
     public function __construct(
-        private ClientProjector $clientProjector,
-        private ClientNotificatorService $clientNotificator,
+        private CommandBusInterface $commandBus
     ) {
     }
 
     public function __invoke(ClientWasCreated $event): void
     {
-        $this->projectReadModel($event);
-        $this->clientNotificator->onClientCreated($event);
+        $command = new ActivateClientCommand($event->id);
+        $this->commandBus->execute($command);
     }
-
-    private function projectReadModel(ClientWasCreated $event): void
-    {
-        $this->clientProjector->onClientCreated($event);
-    }
-
 }

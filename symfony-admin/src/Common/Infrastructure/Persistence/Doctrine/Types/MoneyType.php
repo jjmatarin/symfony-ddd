@@ -63,4 +63,5 @@ class MoneyType extends Type
 
         return new Money((int) $data['amount'], new Currency($data['currency']));
     }
+
 }

@@ -2,14 +2,12 @@
 
 namespace App\Licensing\Domain\Model\Client;
 
-use App\Common\Domain\EventHandling\DomainEventBase;
+use App\Common\Bus\CommandRequestInterface;
 
-readonly class ClientWasDeleted extends DomainEventBase
+readonly class ClientWasDeleted implements CommandRequestInterface
 {
     public function __construct(
-        int $playhead,
-        public string $id,
+        string $id,
     ) {
-        parent::__construct(Client::class, $playhead);
     }
 }

@@ -5,36 +5,33 @@ framework:
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            async: '%env(MESSENGER_TRANSPORT_DSN)%'
             # failed: 'doctrine://default?queue_name=failed'
             sync: 'sync://'
 
         routing:
-            App\Common\Bus\CommandRequestInterface: sync
+            App\Common\Bus\CommandRequestInterface: async
             App\Common\Bus\QueryRequestInterface: sync
-            App\Common\Domain\EventHandling\DomainEventInterface: sync
-            Symfony\Component\Mailer\Messenger\SendEmailMessage: sync
 
-        default_bus: default.bus
+        default_bus: command.bus
         buses:
-            default.bus:
-                middleware:
-
             command.bus:
                 middleware:
-                    - validation
-                    - doctrine_transaction
-                    - App\Common\Infrastructure\EventHandling\Symfony\DomainEventsPublisherMiddleware
+                  - App\Common\Infrastructure\EventHandling\DomainEventsPublisherMiddleware
+                  - validation
+                  - doctrine_transaction
 
             query.bus:
                 middleware:
-                    - validation
+                  - validation
 
             domain.event.bus:
                 default_middleware:
                     allow_no_handlers: true
-                    allow_no_senders: false
-                middleware:
+
+
+            # Route your messages to the transports
+            # 'App\Message\YourMessage': async
 
 # when@test:
 #    framework:
