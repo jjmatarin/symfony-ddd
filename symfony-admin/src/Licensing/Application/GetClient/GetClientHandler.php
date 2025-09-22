@@ -6,6 +6,7 @@ use App\Common\Bus\QueryHandlerInterface;
 use App\Common\Domain\Exception\NotFoundException;
 use App\Common\Domain\Model\EntityId;
 use App\Licensing\ReadModel\Client\ClientReadModelInterface;
+use App\Licensing\ReadModel\Product\ProductReadModelInterface;
 
 readonly class GetClientHandler implements QueryHandlerInterface
 {
@@ -25,9 +26,12 @@ readonly class GetClientHandler implements QueryHandlerInterface
             id: $client->id,
             name: $client->name,
             email: $client->email,
-            status: $client->status,
             activeLicenseType: $client->activeLicenseType,
-            activeProductId: $client->activeProductId
+            activeProduct: new GetClientResponseProduct(
+                id: $client->activeProduct->id,
+                name: $client->activeProduct->name,
+                price: $client->activeProduct->price,
+            )
         );
     }
 }

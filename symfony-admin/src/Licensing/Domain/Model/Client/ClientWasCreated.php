@@ -2,9 +2,9 @@
 
 namespace App\Licensing\Domain\Model\Client;
 
-use App\Common\Bus\CommandRequestInterface;
+use App\Common\Bus\DomainEventInterface;
 
-readonly class ClientWasCreated implements CommandRequestInterface
+readonly class ClientWasCreated implements DomainEventInterface
 {
     public function __construct(
         public string $id,

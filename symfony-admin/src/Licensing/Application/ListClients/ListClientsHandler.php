@@ -25,7 +25,11 @@ readonly class ListClientsHandler implements QueryHandlerInterface
                 id: $client->id,
                 name: $client->name,
                 email: $client->email,
-                status: $client->status,
+                activeProduct: new ListClientsItemProduct(
+                    id: $client->activeProduct->id,
+                    name: $client->activeProduct->name,
+                    price: $client->activeProduct->price,
+                )
             );
         }
         return $result;

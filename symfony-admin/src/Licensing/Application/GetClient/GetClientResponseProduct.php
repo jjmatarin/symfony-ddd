@@ -2,14 +2,12 @@
 
 namespace App\Licensing\Application\GetClient;
 
-readonly class GetClientResponse
+class GetClientResponseProduct
 {
     public function __construct(
         public string $id,
         public string $name,
-        public string $email,
-        public string $activeLicenseType,
-        public GetClientResponseProduct $activeProduct
+        public float $price,
     ) {
     }
 }

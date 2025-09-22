@@ -3,18 +3,18 @@
 namespace App\Licensing\EventHandler;
 
 use App\Common\Bus\DomainEventHandlerInterface;
-use App\Licensing\Domain\Model\Client\ClientWasCreated;
+use App\Licensing\Domain\Model\Client\ClientWasUpdated;
 use App\Licensing\Infrastructure\Projector\ClientProjector;
 
-class ClientWasCreatedHandler implements DomainEventHandlerInterface
+class ClientWasUpdatedHandler implements DomainEventHandlerInterface
 {
     public function __construct(
         private ClientProjector $projector,
     ) {
     }
 
-    public function __invoke(ClientWasCreated $event): void
+    public function __invoke(ClientWasUpdated $event): void
     {
-        $this->projector->onClientCreated($event);
+        $this->projector->onClientUpdated($event);
     }
 }

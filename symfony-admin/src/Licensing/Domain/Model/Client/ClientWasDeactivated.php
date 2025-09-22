@@ -2,12 +2,12 @@
 
 namespace App\Licensing\Domain\Model\Client;
 
-use App\Common\Bus\CommandRequestInterface;
+use App\Common\Bus\DomainEventInterface;
 
-readonly class ClientWasDeactivated implements CommandRequestInterface
+readonly class ClientWasDeactivated implements DomainEventInterface
 {
     public function __construct(
-        string $id,
+        public string $id,
     ) {
     }
 }

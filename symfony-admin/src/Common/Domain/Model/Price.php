@@ -9,4 +9,9 @@ readonly class Price
         public \DateTimeImmutable $date,
     ) {
     }
+
+    public function getAmount(): float
+    {
+        return $this->money->amount / 100;
+    }
 }

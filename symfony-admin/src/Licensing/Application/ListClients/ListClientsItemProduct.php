@@ -2,13 +2,12 @@
 
 namespace App\Licensing\Application\ListClients;
 
-class ListClientsItem
+class ListClientsItemProduct
 {
     public function __construct(
         public string $id,
         public string $name,
-        public string $email,
-        public ListClientsItemProduct $activeProduct
+        public float $price,
     ) {
     }
 }
