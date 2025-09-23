@@ -21,6 +21,7 @@ framework:
                   - App\Common\Infrastructure\EventHandling\DomainEventsPublisherMiddleware
                   - validation
                   - doctrine_transaction
+                  - App\Common\Infrastructure\EventHandling\DomainEventsPersisterMiddleware
 
             query.bus:
                 middleware:

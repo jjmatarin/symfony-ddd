@@ -2,12 +2,14 @@
 
 namespace App\Licensing\Domain\Model\Client;
 
-use App\Common\Bus\DomainEventInterface;
+use App\Common\Domain\EventHandling\DomainEventBase;
 
-readonly class ClientWasActivated implements DomainEventInterface
+readonly class ClientWasActivated extends DomainEventBase
 {
     public function __construct(
-        public string $id,
+        int $playhead,
+        string $id,
     ) {
+        parent::__construct(Client::class, $id, $playhead);
     }
 }

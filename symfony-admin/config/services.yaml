@@ -35,7 +35,7 @@ services:
             - { name: messenger.message_handler }
 
     App\Licensing\Domain\Model\Client\ClientRepositoryInterface:
-        class: App\Licensing\Infrastructure\Persistence\Doctrine\DoctrineClientRepository
+        class: App\Licensing\Infrastructure\Persistence\Doctrine\DoctrineClientEventStoreRepository
 
     App\Licensing\ReadModel\Client\ClientReadModelInterface:
       class: App\Licensing\Infrastructure\ReadModel\Elastic\ElasticClientReadModel

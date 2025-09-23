@@ -36,6 +36,12 @@ doctrine:
                         dir: '%kernel.project_dir%/src/Common/Infrastructure/Persistence/Doctrine/Mapping'
                         prefix: 'App\Common\Domain\Model'
                         alias: App\Common
+                    App\Common\Infrastructure\EventStore\Doctrine:
+                        type: xml
+                        is_bundle: false
+                        dir: '%kernel.project_dir%/src/Common/Infrastructure/EventStore/Doctrine'
+                        prefix: 'App\Common\Infrastructure\EventStore\Doctrine'
+
             read_model:
                 connection: read_model
                 naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
