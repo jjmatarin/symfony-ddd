@@ -3,6 +3,8 @@
 namespace App\Licensing\Infrastructure\Projector;
 
 use App\Common\Bus\QueryBusInterface;
+use App\Licensing\Application\GetClientPdf\GetClientPdfQuery;
+use App\Licensing\Application\GetClientPdf\GetClientPdfResponse;
 use App\Licensing\Application\GetProduct\GetProductQuery;
 use App\Licensing\Domain\Model\Client\ClientLicenseWasChanged;
 use App\Licensing\Domain\Model\Client\ClientWasCreated;
@@ -32,6 +34,7 @@ class ClientProjector
                 'price' => $product->price,
             ],
         ]);
+        $this->regeneratePdf($event->id);
     }
 
     public function onClientUpdated(ClientWasUpdated $event): void
@@ -41,6 +44,7 @@ class ClientProjector
             'email' => $event->email,
             'description' => $event->description,
         ]);
+        $this->regeneratePdf($event->id);
     }
 
     public function onClientDeleted(ClientWasDeleted $event): void
@@ -60,5 +64,13 @@ class ClientProjector
                 'price' => $product->price,
             ],
         ]);
+        $this->regeneratePdf($event->id);
+    }
+
+    private function regeneratePdf(string $id): void
+    {
+        /** @var GetClientPdfResponse $pdf */
+        $pdf = $this->queryBus->execute(new GetClientPdfQuery($id));
+        file_put_contents('/app/var/storage/' . $pdf->filename, base64_decode($pdf->data));
     }
 }

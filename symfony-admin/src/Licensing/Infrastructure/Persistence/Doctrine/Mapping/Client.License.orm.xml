@@ -5,7 +5,7 @@
     <entity name="App\Licensing\Domain\Model\Client\License">
         <id name="client" type="entity_id" association-key="true"/>
         <id name="version" type="integer"/>
-        <field name="date" type="datetime"/>
+        <field name="date" type="datetime_immutable"/>
         <field name="productId" type="entity_id"/>
         <field name="type" type="string" length="10" enum-type="App\Licensing\Domain\Model\Client\LicenseTypeEnum"/>
         <many-to-one field="client" target-entity="App\Licensing\Domain\Model\Client\Client">

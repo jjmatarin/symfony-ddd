@@ -17,7 +17,7 @@ class ClientReportGenerator
         $params = [
             'clientName' => $client->getName(),
             'clientEmail' => $client->getEmail(),
-            'licencesLog' => $client->getLicensesLog()
+            'licensesLog' => $client->getLicensesLog()
         ];
         $template = 'client.html.twig';
         return $this->reportGenerator->generate($template, $params);
