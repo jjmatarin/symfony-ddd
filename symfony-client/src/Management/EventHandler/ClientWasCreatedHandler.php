@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Management\EventHandler;
+
+use App\Management\Application\Owner\CreateOwner\CreateOwnerCommand;
+use App\Shared\Bus\CommandBusInterface;
+use App\Shared\Bus\IntegrationEventHandlerInterface;
+use Contracts\Events\Admin\ClientWasCreated;
+
+class ClientWasCreatedHandler implements IntegrationEventHandlerInterface
+{
+    public function __construct(
+        private readonly CommandBusInterface $commandBus,
+    ) {
+    }
+
+    public function __invoke(ClientWasCreated $event): void
+    {
+        $command = new CreateOwnerCommand($event->id, $event->name, $event->email);
+        $this->commandBus->execute($command);
+    }
+}

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "16b9eaa28c80c68326e5180dcfb784e4",
+    "content-hash": "d3ff654b709225ec375c94bb486f26b5",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -2338,6 +2338,25 @@
                 "source": "https://github.com/MyIntervals/PHP-CSS-Parser/tree/v8.9.0"
             },
             "time": "2025-07-11T13:20:48+00:00"
+        },
+        {
+            "name": "symfony-ddd/message-contracts",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../shared-message-contracts",
+                "reference": "122261a746f5abd0aa6e7a6f416b8fd8791e6f21"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Contracts\\": "src/Contracts/"
+                }
+            },
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "symfony/amqp-messenger",
@@ -8180,7 +8199,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "symfony-ddd/message-contracts": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -3,16 +3,49 @@ framework:
         # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
         # failure_transport: failed
 
+        failure_transport: dlq
+
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
             async: '%env(MESSENGER_TRANSPORT_DSN)%'
             # failed: 'doctrine://default?queue_name=failed'
             sync: 'sync://'
 
+            integration:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: integration_events
+                        type: topic
+                        arguments:
+                            alternate-exchange: dlq
+                    queues:
+                        admin:
+                            binding_keys: ["admin.client.*"]
+                            arguments:
+                                x-dead-letter-exchange: dlx
+                                x-dead-letter-routing-key: app.dlq
+
+                    retry_strategy:
+                        max_retries: 5         # número máximo de reintentos
+                        delay: 2000            # ms entre reintentos
+                        multiplier: 5          # exponencial: 1s, 2s, 4s...
+                        max_delay: 50000       # máximo 10s
+            dlq:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: dlx
+                        type: direct
+                    queues:
+                        app_dlq:
+                            binding_keys: [app.dlq]
+
         routing:
-            App\Common\Bus\CommandRequestInterface: async
+            App\Common\Bus\CommandRequestInterface: sync
             App\Common\Bus\QueryRequestInterface: sync
-            App\Common\Bus\DomainEventInterface: async
+            App\Common\Bus\DomainEventInterface: sync
+            Contracts\Events\IntegrationEventInterface: integration
 
         default_bus: command.bus
         buses:
@@ -31,6 +64,9 @@ framework:
                 default_middleware:
                     allow_no_handlers: true
 
+            integration.event.bus:
+                default_middleware:
+                    allow_no_handlers: true
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
@@ -41,4 +77,4 @@ when@test:
           transports:
               # replace with your transport name here (e.g., my_transport: 'in-memory://')
               # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
-              async: 'sync://' # 'in-memory://'
+              # async: 'sync://' # 'in-memory://'

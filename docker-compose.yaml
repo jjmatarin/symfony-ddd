@@ -23,6 +23,7 @@ services:
         volumes:
             - ./symfony-client:/app
             - ./shared-message-contracts:/shared-message-contracts
+            - ./docker/frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
         environment:
             FRANKENPHP_CERT: /app/certs/server.crt
             FRANKENPHP_KEY: /app/certs/server.key
@@ -37,6 +38,7 @@ services:
         volumes:
             - ./symfony-campus:/app
             - ./shared-message-contracts:/shared-message-contracts
+            - ./docker/frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
         environment:
             FRANKENPHP_CERT: /app/certs/server.crt
             FRANKENPHP_KEY: /app/certs/server.key

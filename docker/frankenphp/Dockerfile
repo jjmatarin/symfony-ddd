@@ -27,4 +27,8 @@ RUN pecl install opentelemetry && docker-php-ext-enable opentelemetry
 RUN set -eux; install-php-extensions xdebug;
 RUN set -eux; install-php-extensions rdkafka;
 
+RUN groupadd -g 1000 appgroup && useradd -u 1000 -g appgroup -m appuser
+RUN chown -R appuser:appgroup /app /data
+USER 1000
+
 WORKDIR /app
