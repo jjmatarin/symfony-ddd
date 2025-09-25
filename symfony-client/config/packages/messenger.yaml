@@ -1,12 +1,13 @@
 framework:
     messenger:
         # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
-        # failure_transport: failed
+        failure_transport: failed
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            async: '%env(MESSENGER_TRANSPORT_DSN)%'
             # failed: 'doctrine://default?queue_name=failed'
+            failed: 'sync://'
             sync: 'sync://'
             integration:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
@@ -16,10 +17,15 @@ framework:
                         type: topic
                     queues:
                         client:
-                            binding_keys: ["admin.client.created"]
+                            binding_keys: ["client.#"]
+                retry_strategy:
+                    max_retries: 4         # número máximo de reintentos
+                    delay: 1000            # ms entre reintentos
+                    multiplier: 5          # exponencial: 1s, 2s, 4s...
+                    max_delay: 50000       # máximo 10s
 
         routing:
-          App\Shared\Bus\CommandRequestInterface: sync
+          App\Shared\Bus\CommandRequestInterface: async
           App\Shared\Bus\QueryRequestInterface: sync
           App\Shared\Bus\DomainEventInterface: sync
           Contracts\Events\IntegrationEventInterface: integration

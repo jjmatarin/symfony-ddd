@@ -1,12 +1,14 @@
 {
     "name": "symfony-ddd/message-contracts",
     "require": {
-    },
-    "require-dev": {
+        "symfony/http-client": "7.1.*",
+        "symfony/serializer": "7.1.*",
+        "symfony/property-access": "7.1.*"
     },
     "autoload": {
         "psr-4": {
-            "Contracts\\": "src/Contracts/"
+            "Contracts\\": "src/Contracts/",
+            "Client\\": "src/Client/"
         }
     }
 }

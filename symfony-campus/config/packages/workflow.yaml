@@ -1,0 +1,21 @@
+framework:
+    workflows:
+        client_process:
+            type: 'state_machine'
+            support: App\Entity\Process
+            marking_store:
+                service: App\Service\ClientProcessService
+            initial_marking: client_created
+            transitions:
+                to_create_owner:
+                    from: client_created
+                    to: owner_created
+                to_create_space:
+                    from: owner_created
+                    to: space_created
+                to_provide_student:
+                    from: space_created
+                    to: student_created
+                to_register_student:
+                    from: student_created
+                    to: student_registered

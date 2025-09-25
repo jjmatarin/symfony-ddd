@@ -17,20 +17,19 @@ framework:
                     exchange:
                         name: integration_events
                         type: topic
-                        arguments:
-                            alternate-exchange: dlq
+
                     queues:
                         admin:
-                            binding_keys: ["admin.client.*"]
+                            binding_keys: ["admin.#"]
                             arguments:
-                                x-dead-letter-exchange: dlx
-                                x-dead-letter-routing-key: app.dlq
+#                                x-dead-letter-exchange: dlx
+#                                x-dead-letter-routing-key: app.dlq
 
-                    retry_strategy:
-                        max_retries: 5         # número máximo de reintentos
-                        delay: 2000            # ms entre reintentos
-                        multiplier: 5          # exponencial: 1s, 2s, 4s...
-                        max_delay: 50000       # máximo 10s
+                retry_strategy:
+                    max_retries: 3         # número máximo de reintentos
+                    delay: 1000            # ms entre reintentos
+                    multiplier: 5          # exponencial: 1s, 2s, 4s...
+                    max_delay: 50000       # máximo 10s
             dlq:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:

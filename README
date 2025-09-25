@@ -1,0 +1,32 @@
+
+* Manejo de errores y Logging en Microservicios (Mucha carencia)
+* Monitorización y Observabilidad (vistazo general con posibilidad de bajar al detalle)
+* Estrategias de refactoring (código y test)
+* Testing (mostrar lo que tenemos) --> Tienen cosas y querrían recibir consejos en la línea mejorar el enfoque del testing
+* Sonarqube
+
+
+# MUST
+* Arquitectura de Microservicios (visión global)
+* Event Sourcing (muy importante)
+* DDD (necesitamos profundizar pero ¿debemos usarlo? No tenemos confianza en lo que hemos desarrollado)
+
+
+# NICE TO HAVE
+* Hexagonal (viene bien un repaso pero es lo que mejor hacemos). Dependencias entre capas.
+* CQRS (no lo hacemos del todo mal pero afianzar)
+* Seguridad en Microservicios con Symfony (lo hacemos demasiado simple, hay que mejorar este punto)
+* Documentación (herramientas o mecanismos que relacionen documentación y código)
+
+
+# MENOS INTERESANTES
+* Integración y Despliegue Continuos (CI/CD). Tenemos un equipo DevOps, interesante realizar una vista general de los conceptos y procesos.
+**  Interesante: Configuración de pipelines de CI/CD con Symfony.
+* Gestión de Configuraciones y Secretos (razonablemente bien, nos interesa el  best practices y gestión efectiva)
+
+
+
+
+* SOLID: repaso general
+* Escalado y Optimización de Microservicios --> Optimización de rendimiento en Symfony y Cache.
+* Patrones de Diseño destacados: Read Model, Builder, State, Strategy, Observer, Otros interesantes

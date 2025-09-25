@@ -21,7 +21,7 @@ class IntegrationEventBus implements IntegrationEventBusInterface
     {
         $this->integrationEventBus->dispatch($event, [
             new TestStamp('Test Message'),
-            new AmqpStamp('adminaaa.client.created')
+#            new AmqpStamp('admin.client.created')
         ]);
     }
 }

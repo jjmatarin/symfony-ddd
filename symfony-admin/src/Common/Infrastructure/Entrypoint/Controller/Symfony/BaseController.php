@@ -52,7 +52,7 @@ abstract class BaseController extends AbstractController
             return $this->json([], status: Response::HTTP_NO_CONTENT);
         }
 
-        return $this->json(['data' => $response], status: Response::HTTP_OK);
+        return $this->json($response, status: Response::HTTP_OK);
     }
 
 }

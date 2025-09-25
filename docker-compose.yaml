@@ -4,12 +4,13 @@ services:
             context: .
             dockerfile: docker/frankenphp/Dockerfile
         ports:
-            - "8001:443"
+            - "8001:80"
         volumes:
             - ./symfony-admin:/app
             - ./shared-message-contracts:/shared-message-contracts
             - ./docker/frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
         environment:
+            SERVER_NAME: app-admin:80
             FRANKENPHP_CERT: /app/certs/server.crt
             FRANKENPHP_KEY: /app/certs/server.key
             PHP_IDE_CONFIG: serverName=app-admin

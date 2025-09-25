@@ -1,6 +1,7 @@
 
 reset-elastic:
 	docker compose exec app-admin curl -s -X DELETE http://elasticsearch:9200/clients
+	docker compose exec app-admin curl -s -X DELETE http://elasticsearch:9200/owners
 
 reset-database:
 	docker compose exec app-admin php bin/console doctrine:database:drop --force --if-exists
