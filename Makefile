@@ -14,3 +14,6 @@ reset: reset-elastic reset-database
 
 test: reset
 	docker compose exec app-admin php bin/phpunit tests/E2E
+
+behat:
+	docker compose exec app-admin vendor/bin/behat
