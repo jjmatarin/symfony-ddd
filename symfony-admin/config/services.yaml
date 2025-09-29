@@ -43,3 +43,16 @@ services:
 
     App\Licensing\ReadModel\Client\ClientReadModelInterface:
       class: App\Licensing\Infrastructure\ReadModel\Elastic\ElasticClientReadModel
+
+    App\Common\Infrastructure\Tracing\Opentelemetry\OpentelemetryTracerProviderFactory:
+        arguments:
+            $endpoint: '%env(OTEL_EXPORTER_OTLP_ENDPOINT)%'
+            $serviceName: '%env(OTEL_SERVICE_NAME)%'
+
+    Prometheus\CollectorRegistry:
+        arguments:
+            - '@Prometheus\Storage\Redis'
+
+    Prometheus\Storage\Redis:
+        arguments:
+            - { host: 'redis', port: 6379 }

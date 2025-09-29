@@ -79,6 +79,12 @@ services:
         volumes:
             - esdata:/usr/share/elasticsearch/data
 
+    redis:
+        image: redis:7-alpine
+        container_name: redis
+        ports:
+            - "6379:6379"
+
     mailer:
       image: axllent/mailpit
       ports:

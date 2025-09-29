@@ -50,14 +50,18 @@ framework:
         buses:
             command.bus:
                 middleware:
-                  - App\Common\Infrastructure\EventHandling\DomainEventsPublisherMiddleware
-                  - validation
-                  - doctrine_transaction
-                  - App\Common\Infrastructure\EventHandling\DomainEventsPersisterMiddleware
+                    - App\Common\Infrastructure\Tracing\Opentelemetry\OpentelemetryTracingMiddleware
+                    - App\Common\Infrastructure\Tracing\Prometheus\PrometheusMetricsMiddleware
+                    - App\Common\Infrastructure\EventHandling\DomainEventsPublisherMiddleware
+                    - validation
+                    - doctrine_transaction
+                    - App\Common\Infrastructure\EventHandling\DomainEventsPersisterMiddleware
 
             query.bus:
                 middleware:
-                  - validation
+                    - App\Common\Infrastructure\Tracing\Opentelemetry\OpentelemetryTracingMiddleware
+                    - App\Common\Infrastructure\Tracing\Prometheus\PrometheusMetricsMiddleware
+                    - validation
 
             domain.event.bus:
                 default_middleware:
@@ -66,6 +70,8 @@ framework:
             integration.event.bus:
                 default_middleware:
                     allow_no_handlers: true
+                middleware:
+                    - App\Common\Infrastructure\Tracing\Opentelemetry\OpentelemetryPropagatorMiddleware
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
