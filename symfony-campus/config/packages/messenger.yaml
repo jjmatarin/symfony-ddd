@@ -29,6 +29,7 @@ framework:
                     allow_no_handlers: true
                 middleware:
                     - App\Tracing\Opentelemetry\OpentelemetryTracingMiddleware
+                    - App\Security\SecurityMiddleware
 
 # when@test:
 #    framework:

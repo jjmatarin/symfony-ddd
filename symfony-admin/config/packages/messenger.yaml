@@ -50,6 +50,7 @@ framework:
         buses:
             command.bus:
                 middleware:
+                    - App\Security\Infrastructure\Symfony\SecurityMiddleware
                     - App\Common\Infrastructure\Tracing\Opentelemetry\OpentelemetryTracingMiddleware
                     - App\Common\Infrastructure\Tracing\Prometheus\PrometheusMetricsMiddleware
                     - App\Common\Infrastructure\EventHandling\DomainEventsPublisherMiddleware
@@ -72,6 +73,7 @@ framework:
                     allow_no_handlers: true
                 middleware:
                     - App\Common\Infrastructure\Tracing\Opentelemetry\OpentelemetryPropagatorMiddleware
+                    - App\Security\Infrastructure\Symfony\SecurityTokenPropagatorMiddleware
 
             # Route your messages to the transports
             # 'App\Message\YourMessage': async

@@ -9,16 +9,21 @@ use Contracts\Events\IntegrationEventInterface;
 use Contracts\Stamps\TestStamp;
 use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class IntegrationEventBus implements IntegrationEventBusInterface
 {
     public function __construct(
         private MessageBusInterface $integrationEventBus,
+        private TokenStorageInterface $tokenStorage,
     ) {
     }
 
     public function dispatch(IntegrationEventInterface $event): void
     {
+        $token = $this->tokenStorage->getToken();
+        $jwtToken = $token->getUser()->token;
+
         $this->integrationEventBus->dispatch($event, [
             new TestStamp('Test Message'),
 #            new AmqpStamp('admin.client.created')

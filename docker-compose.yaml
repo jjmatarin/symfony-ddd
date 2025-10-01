@@ -10,7 +10,7 @@ services:
             - ./shared-message-contracts:/shared-message-contracts
             - ./docker/frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
         environment:
-            SERVER_NAME: app-admin:80
+            SERVER_NAME: app-admin:80, localhost:80
             FRANKENPHP_CERT: /app/certs/server.crt
             FRANKENPHP_KEY: /app/certs/server.key
             PHP_IDE_CONFIG: serverName=app-admin
@@ -44,6 +44,22 @@ services:
             FRANKENPHP_CERT: /app/certs/server.crt
             FRANKENPHP_KEY: /app/certs/server.key
             PHP_IDE_CONFIG: serverName=app-campus
+
+    app-auth:
+        build:
+            context: .
+            dockerfile: docker/frankenphp/Dockerfile
+        ports:
+            - "8005:80"
+        volumes:
+            - ./symfony-auth:/app
+            - ./shared-message-contracts:/shared-message-contracts
+            - ./docker/frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
+        environment:
+            SERVER_NAME: app-auth:80, localhost:80
+            FRANKENPHP_CERT: /app/certs/server.crt
+            FRANKENPHP_KEY: /app/certs/server.key
+            PHP_IDE_CONFIG: serverName=app-auth
 
     db:
         image: postgres:16
